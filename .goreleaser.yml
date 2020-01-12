@@ -1,0 +1,22 @@
+project_name: foo
+
+builds:
+  - goos: [linux]
+    goarch: [amd64]
+  - id: windows-build
+    goos: [windows]
+    goarch: [amd64]
+
+archives:
+  - builds: [foo]
+    format: tar.gz
+  - id: windows
+    builds: [windows-build]
+    format: binary
+
+signs:
+  - signature: "${artifact}.msi"
+    cmd: ./signtool
+    args: ["${signature}", "${artifact}"]
+    artifacts: all
+    ids: [windows]
